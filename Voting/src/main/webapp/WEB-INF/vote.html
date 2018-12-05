@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<HTML 
+xmlns="http://www.w3.org/1999/xhtml"><HEAD><META content="IE=11.0000" 
+http-equiv="X-UA-Compatible">
+ 
+<META charset="utf-8"> 
+<TITLE>参与投票</TITLE>
+ <LINK href="css/style.css" rel="stylesheet" type="text/css"> 
+<BODY>
+<DIV class="wrap" id="header"><IMG src="images/logo.gif"> </DIV>
+<DIV class="wrap" id="navbar">
+<DIV class="profile">您好，admin		 <SPAN class="return"><A href="http://localhost:8080/myVote/Subject-list.action">返回列表</A></SPAN>
+		 <SPAN class="addnew"><A href="http://localhost:8080/myVote/Subject-add.action">添加新投票</A></SPAN>
+		 <SPAN class="modify"><A href="http://localhost:8080/myVote/Subject-modify.action">维护</A></SPAN>
+		 <SPAN class="return"><A 
+href="http://localhost:8080/myVote/User-exit.action">注销</A></SPAN>	 </DIV>
+<DIV class="search">
+<FORM action="Subject-search.action" method="post"><INPUT name="keywords" class="input-text" type="text"><INPUT name="submit" class="input-button" type="submit" value=""/>
+		 </FORM></DIV></DIV>
+<DIV class="wrap" id="vote">
+<H2>参与投票</H2>
+<UL class="list">
+  <LI>
+  <H4>就业意向城市</H4>
+  <P class="info">共有 4 个选项，已有 9 个投票。</P>
+  <FORM action="Vote-voteSave.action" method="post"><INPUT name="entityId" type="hidden" value="1"> 
+  			    <INPUT name="struts.token.name" type="hidden" value="token"> 
+<INPUT name="token" type="hidden" value="4UDEDKPAXYKC1PTLWA2OMZGQ925VSGDB">
+				 
+  <OL>
+    <LI><INPUT name="options" type="radio" value="2">长沙</LI>
+    <LI><INPUT name="options" type="radio" value="3">广州</LI>
+    <LI><INPUT name="options" type="radio" value="5">上海</LI>
+    <LI><INPUT name="options" type="radio" value="6">深圳</LI></OL>
+  <P class="voteView"><INPUT type="image" src="images/button_vote.gif"/><A 
+  href="http://localhost:8080/myVote/Vote-view.action?entityId=1"><IMG src="images/button_view.gif"/></A></P></FORM></LI></UL></DIV>
+<DIV class="wrap" id="footer">	北大青鸟 © 版权所有 </DIV></BODY></HTML>
