@@ -1,6 +1,6 @@
 package com.springboot.controller;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
+
 import com.github.pagehelper.Page;
 import com.springboot.pojo.Item;
 import com.springboot.pojo.Options;
@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-
+/**
+ * votelist
+ * @author acer
+ *
+ */
 @Controller
 public class VoteListController {
     @Autowired
