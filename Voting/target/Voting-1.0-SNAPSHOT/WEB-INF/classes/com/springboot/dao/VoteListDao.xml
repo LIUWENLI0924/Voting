@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.dao.VoteListDao">
+	<sql id="selike">
+		<if test="title!=null and title!=''">
+            WHERE s.title like concat('%',#{title},'%')
+		</if>
+	</sql>
+	<!--自定义映射视图  -->
+	<resultMap type="Subject" id="vote">
+		<id column="sid" property="sid"/>
+		<result column="title" property="title"/>
+		<association property="op" javaType="Options">
+			<id column="oid" property="oid"/>
+			<result column="content" property="content"/>
+		</association>
+		<association property="it" javaType="Item">
+			<id column="iid" property="iid"/>
+			<result column="uid" property="uid"/>
+		</association>
+	</resultMap>
+	<resultMap id="opt" type="Options">
+		<id column="oid" property="oid"/>
+		<association property="sub" javaType="Subject">
+			<id column="sid" property="sid"/>
+			<result column="title" property="title"/>
+		</association>
+	</resultMap>
+	<!--查询列表-->
+	<select id="getVote" resultMap="vote" parameterType="String">
+		SELECT s.sid,s.title,COUNT(DISTINCT o.oid) as oid,COUNT(DISTINCT i.iid) as iid,o.content
+		FROM `subject` s
+		LEFT JOIN `options` o ON s.sid=o.osid
+		LEFT JOIN `item` i ON s.sid=i.sid
+		<include refid="selike"></include>
+		GROUP BY s.sid,s.title
+	</select>
+	<!--根据id查询列表-->
+	<select id="getVoteById" resultMap="vote" parameterType="int">
+		SELECT s.sid,s.title,COUNT(DISTINCT o.oid) as oid,COUNT(DISTINCT i.iid) as iid,o.content,s.type
+		FROM `subject` s
+		LEFT JOIN `options` o ON s.sid=o.osid
+		LEFT JOIN `item` i ON s.sid=i.sid
+		WHERE s.sid=#{sid}
+		GROUP BY s.sid,s.title
+	</select>
+	<!--查询content-->
+	<select id="getContent" resultType="Options" parameterType="int">
+		SELECT * FROM `options` WHERE osid =#{sid}
+	</select>
+	<!--新增投票-->
+	<insert id="voteAdd" parameterType="int">
+		INSERT INTO `item` VALUE(0,#{uid},#{sid},#{oid});
+	</insert>
+	<!--判断是否投过票-->
+	<select id="isVote" resultType="int" parameterType="Item">
+		SELECT COUNT(*)
+		FROM item
+		WHERE uid=#{uid} AND sid=#{sid}
+	</select>
+	<!--根据sid查询oid-->
+	<select id="getOid" resultType="Options" parameterType="int">
+		SELECT oid,content
+		FROM `options`
+		WHERE osid =#{osid}
+	</select>
+	<!--查询票数-->
+	<select id="voteNum" resultType="int" parameterType="Item">
+		SELECT COUNT(*) FROM item WHERE sid=#{sid} AND oid=#{oid}
+	</select>
+	<!--新增subject表-->
+	<insert id="subAdd" parameterType="Subject">
+		INSERT INTO SUBJECT VALUES(0,#{title},#{type})
+	</insert>
+	<!--新增OPTIONS表-->
+	<insert id="optAdd" parameterType="Options">
+		INSERT INTO OPTIONS VALUES(0,#{content},#{osid})
+	</insert>
+	<!--根据主题查询sid-->
+	<select id="getSid" resultType="int" parameterType="String">
+		SELECT sid FROM `subject` WHERE title=#{title}
+	</select>
+	<!--根据sid删除SUBJECT表-->
+	<delete id="delSub" parameterType="int">
+		DELETE FROM SUBJECT WHERE sid=#{sid}
+	</delete>
+	<!--根据sid删除OPTIONS表-->
+	<delete id="delOpt" parameterType="int">
+		DELETE FROM OPTIONS WHERE osid=#{osid}
+	</delete>
+	<!--根据sid删除Item表-->
+	<delete id="delItem" parameterType="int">
+		DELETE FROM item WHERE sid=#{sid}
+	</delete>
+	<!--修改subject-->
+	<update id="updSub" parameterType="Subject">
+		UPDATE `subject` SET TYPE=#{type} WHERE sid=#{sid}
+	</update>
+	<!--修改Options-->
+	<update id="updOpt" parameterType="Options">
+		UPDATE `options` SET content=#{content} WHERE osid=#{osid} AND oid=#{oid}
+	</update>
+	<select id="contOp" resultType="Options" parameterType="int">
+		SELECT content FROM `options` WHERE osid=#{osid}
+	</select>
+	<select id="getOids" resultType="Options">
+		SELECT oid FROM `options`
+	</select>
+	<delete id="delById"  parameterType="int">
+		DELETE FROM `options` WHERE oid=#{oid}
+	</delete>
+</mapper>

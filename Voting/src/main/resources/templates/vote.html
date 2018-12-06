@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META content="IE=11.0000"
+          http-equiv="X-UA-Compatible">
+
+    <META charset="utf-8">
+    <TITLE>参与投票</TITLE>
+    <LINK href="css/style.css" rel="stylesheet" type="text/css">
+<BODY>
+<DIV class="wrap" id="header"><IMG src="images/logo.gif"></DIV>
+<DIV class="wrap" id="navbar">
+    <DIV class="profile">您好，<span th:text="${session.users.username}"></span>
+        <SPAN class="return"><A th:href="@{/getVote?pageIndex=1}">返回列表</A></SPAN>
+        <SPAN class="addnew"><A href="http://localhost:8080/myVote/Subject-add.action">添加新投票</A></SPAN>
+        <SPAN class="modify"><A href="http://localhost:8080/myVote/Subject-modify.action">维护</A></SPAN>
+        <SPAN class="return"><A href="http://localhost:8080/myVote/User-exit.action">注销</A></SPAN></DIV>
+    <DIV class="search">
+     <FORM action="Subject-search.action" method="post">
+            <INPUT name="keywords" class="input-text" type="text">
+            <INPUT name="submit" class="input-button" type="submit" value=""/>
+        </FORM></DIV></DIV>
+        <DIV class="wrap" id="vote">
+            <H2>参与投票</H2>
+            <UL class="list">
+                <LI class="odd">
+                    <H4 th:text="${sub.title}">就业意向城市</H4>
+                    <P class="info"><span th:text="${sub.op.oid}"></span> 个选项，已有 <span th:text="${sub.it.iid}"></span>个投票。
+                    </P>
+                    <FORM action="voteAdd" method="post">
+                        <INPUT name="uid" type="hidden" th:value="${session.users.uid}">
+                        <INPUT name="sid" type="hidden" th:value="${sub.sid}">
+                        <INPUT name="token" type="hidden" value="4UDEDKPAXYKC1PTLWA2OMZGQ925VSGDB">
+
+                        <OL>
+                            <LI th:each="su,vStart:${su}">
+                                <span th:if="${sub.type eq 1}">
+                                 <INPUT name="oid" type="radio" th:value="${su.oid}" th:text="${su.content}">
+                                </span>
+                                <span th:if="${sub.type eq 2}">
+                                 <INPUT name="oid" type="checkbox" th:value="${su.oid}" th:text="${su.content}">
+                                </span>
+                            </LI>
+                        </OL>
+                        <P class="voteView"><INPUT type="image" src="images/button_vote.gif"/>
+                            <A th:href="@{selVoteById(sid=${sub.sid})}">
+                                <IMG src="images/button_view.gif"/></A></P>
+                    </FORM>
+                </LI>
+            </UL>
+        </DIV>
+        <DIV class="wrap" id="footer"> 北大青鸟 © 版权所有</DIV>
+    </DIV>
+</DIV>
+</BODY>
+</HTML>

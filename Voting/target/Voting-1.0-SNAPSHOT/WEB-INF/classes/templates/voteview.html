@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+  <META content="IE=11.0000" http-equiv="X-UA-Compatible">
+ 
+<META charset="utf-8"> 
+<TITLE></TITLE> <LINK href="css/style.css" rel="stylesheet" type="text/css"> 
+<BODY>
+<DIV class="wrap" id="header"><IMG src="images/logo.gif"> </DIV>
+<DIV class="wrap" id="navbar">
+<DIV class="profile">您好，<span th:text="${session.users.username}"></span>
+        <SPAN class="return"><A th:href="@{/getVote?pageIndex=1}">返回列表</A></SPAN>
+		 <SPAN class="addnew"><A href="http://localhost:8080/myVote/Subject-add.action">添加新投票</A></SPAN>
+		 <SPAN class="modify"><A href="http://localhost:8080/myVote/Subject-modify.action">维护</A></SPAN>
+		 <SPAN class="return"><A href="http://localhost:8080/myVote/User-exit.action">注销</A></SPAN>	 </DIV>
+<DIV class="search">
+<FORM action="Subject-search.action" method="post">
+    <INPUT name="keywords" class="input-text" type="text">
+    <INPUT name="submit" class="input-button" type="submit" value=""/>
+		 </FORM></DIV></DIV>
+<DIV class="wrap" id="vote" >
+<H2>查看投票</H2>
+<UL class="list">
+  <LI >
+  <H4 th:text="${sub.title}">哪个浏览器
+      好用</H4>
+    <P class="info"><span th:text="${sub.op.oid}"></span> 个选项，已有 <span th:text="${sub.it.iid}"></span>个投票。
+    </P>
+  <OL>
+    <LI th:each="oids,vStart:${oids}"><span th:text="${oids.content}"></span>
+        <DIV class="rate">
+            <DIV class="ratebg">
+                <div th:if="${sub.it.iid eq 0}">
+                     <span>
+                      <DIV class="percent"  style="width:0%;"></DIV>
+                     </span>
+                </div>
+                <span th:if="${sub.it.iid gt 0}">
+                      <DIV class="percent"  th:style="'width:'+(${oids.voteNum}/${sub.it.iid}*100)+'%;'"></DIV>
+                </span>
+        </DIV>
+            <P >
+                <div  th:if="${sub.it.iid eq 0}">
+                  <p>0票<span>(0%)</span></p>
+               </div>
+                <div  th:if="${sub.it.iid gt 0}">
+                    <span th:text="${oids.voteNum}"></span>票<SPAN th:text="${oids.voteNum}/${sub.it.iid}*100"></span>%
+                </div>
+            </P>
+        </div>
+        </DIV>
+    </LI>
+  </OL>
+  <DIV class="goback"><A th:href="@{/getVote?pageIndex=1}">返回投票列表</A></DIV></LI></UL></DIV>
+<DIV class="wrap" id="footer">	北大青鸟 © 版权所有 </DIV></BODY></HTML>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META content="IE=11.0000" http-equiv="X-UA-Compatible">
+    <META charset="utf-8">
+    <TITLE>投票列表</TITLE>
+    <LINK href="css/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+    <script>
+    $(function(){
+        $('.del').click(function(){
+             var sid=$(".sid").val();
+            if(confirm('确定要删除？')){
+                location.href = 'del?sid='+sid;
+            }
+        });
+    });
+</script>
+
+<BODY>
+<DIV class="wrap" id="header"><IMG src="images/logo.gif"></DIV>
+<DIV class="wrap" id="navbar">
+    <DIV class="profile">您好，<span th:text="${session.users.username}"></span>
+        <SPAN class="return"><A th:href="@{/getVote(pageIndex=1)}">返回列表</A></SPAN>
+        <SPAN class="addnew"><A th:href="weihu">添加新投票</A></SPAN>
+        <SPAN class="modify"><A href="http://localhost:8080/myVote/Subject-modify.action">维护</A></SPAN>
+        <SPAN class="return"><A href="http://localhost:8080/myVote/User-exit.action">注销</A></SPAN></DIV>
+    <DIV class="search">
+        <FORM action="getVote?pageIndex=1" method="post">
+            <INPUT name="title" class="input-text" type="text">
+            <INPUT name="submit" class="input-button" type="submit" value=""/>
+        </FORM>
+    </DIV>
+</DIV>
+<DIV class="wrap" id="vote">
+    <H2>投票列表</H2>
+    <BR>
+    <UL class="list" th:each="sub,vStart:${session.list}">
+        <LI class="odd" >
+            <H4>
+                <em>
+                    <a th:href="@{selById(sid=${sub.sid})}">维护</a>
+                    <a href="#" class="del">删除</a>
+                    <input type="hidden" th:value="${sub.sid}" class="sid">
+                </em>
+                <A th:href="@{selVoteById(sid=${sub.sid})}" th:text="${sub.title}">哪个浏览器好用</A>
+            </H4>
+            <P class="info" ><span th:text="${sub.op.oid}"></span> 个选项，已有 <span th:text="${sub.it.iid}"></span>个投票。
+            </P></LI>
+    </UL>
+
+    <DIV style="float: right;">
+        <A th:href="@{/weihu(pageIndex=1)}">首页</A>
+        <A th:href="@{/weihu(pageIndex=${session.list.getPageNum()-1})}">上一页</A>
+        <A th:href="@{/weihu(pageIndex=${session.list.getPageNum()+1})}">下一页</A>
+        <A th:href="@{/weihu(pageIndex=${session.list.getPages()})}">末页</A>
+    </DIV>
+</DIV>
+<DIV class="wrap" id="footer"> 北大青鸟 © 版权所有</DIV>
+</BODY>
+</HTML>
